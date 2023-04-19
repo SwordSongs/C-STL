@@ -1,2 +1,2 @@
-# C-STL
+# C++-STL
 Some exercises for C++ STL
