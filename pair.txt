@@ -1,0 +1,24 @@
+#include<iostream>
+#include<utility>
+#include<string>
+using namespace std;
+
+template<typename T1, typename T2>
+ostream& operator << (ostream& os, const pair<T1, T2> &p)
+{
+    return os << "[" << p.first << " , " << p.second << "]" << endl;
+}
+
+int main() {
+    pair<int, string> p1 = make_pair(1, "hello");
+    pair<int, string> p2 = make_pair(2, "world");
+
+    cout << p1 << p2;
+    cout << tuple_size<pair<int, string>>::value << endl;
+    tuple_element<1, pair<int, string>>::type second = get<1>(p1);
+    cout << "second: " << second << endl;
+
+    system("pause");
+
+    return 0;
+}
