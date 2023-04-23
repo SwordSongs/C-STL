@@ -1,6 +1,7 @@
 #include<iostream>
 #include<utility>
 #include<string>
+#include<tuple>
 using namespace std;
 
 template<typename T1, typename T2>
@@ -9,14 +10,43 @@ ostream& operator << (ostream& os, const pair<T1, T2> &p)
     return os << "[" << p.first << " , " << p.second << "]" << endl;
 }
 
+class Foo 
+{
+public:
+    Foo(tuple<int, double>)
+    {
+        cout << "Foo::Foo(tuple)" << endl;
+    }
+
+    Foo(int i, double d)
+    {
+        cout << "Foo::Foo(int, double)" << endl;   
+    }
+
+    template<typename... Args>
+    Foo(Args... args)
+    {
+        cout << "Foo::Foo(args...)" << endl;
+    }
+};
+
 int main() {
     pair<int, string> p1 = make_pair(1, "hello");
     pair<int, string> p2 = make_pair(2, "world");
 
-    cout << p1 << p2;
-    cout << tuple_size<pair<int, string>>::value << endl;
-    tuple_element<1, pair<int, string>>::type second = get<1>(p1);
-    cout << "second: " << second << endl;
+    //cout << p1 << p2;
+    //cout << tuple_size<pair<int, string>>::value << endl;
+    //tuple_element<1, pair<int, string>>::type second = get<1>(p1);
+    //cout << "second: " << second << endl;
+
+    
+    tuple<int, double> t(10, 10.2);
+
+    //pass the tuple as a whole to the constructor of Foo
+    pair<int, Foo> p3 (10,t);
+
+    //pass the elements of the tuple to the constructor of Foo
+    pair<int, Foo> p4(piecewise_construct, make_tuple(10), t);
 
     system("pause");
 
