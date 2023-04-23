@@ -2,6 +2,7 @@
 #include<utility>
 #include<string>
 #include<tuple>
+#include<functional>
 using namespace std;
 
 template<typename T1, typename T2>
@@ -18,10 +19,10 @@ public:
         cout << "Foo::Foo(tuple)" << endl;
     }
 
-    Foo(int i, double d)
-    {
-        cout << "Foo::Foo(int, double)" << endl;   
-    }
+    //Foo(int i, double d)
+    //{
+    //    cout << "Foo::Foo(int, double)" << endl;   
+    //}
 
     template<typename... Args>
     Foo(Args... args)
@@ -43,10 +44,38 @@ int main() {
     tuple<int, double> t(10, 10.2);
 
     //pass the tuple as a whole to the constructor of Foo
-    pair<int, Foo> p3 (10,t);
+    /*pair<int, Foo> p3 (10,t);*/
 
     //pass the elements of the tuple to the constructor of Foo
-    pair<int, Foo> p4(piecewise_construct, make_tuple(10), t);
+    /*pair<int, Foo> p4(piecewise_construct, make_tuple(10), t);*/
+     
+    pair<int, float> pair7(10, 3.14F);    //create pair<int, float>, 3.14 default double
+    auto pair8 = make_pair(10, 3.14);    //create pair<int, double>
+
+
+    int i = 10;
+    string s = "hello";
+
+    auto p5 = make_pair(move(i), move(s));    //i and s are nolonger used
+    cout << "p5.first: " << p5.first << " , p5.second: " << p5.second << endl;
+
+    int j = 100;
+
+    auto p6 = make_pair(ref(j), ref(j));  //create pair<int&, int&>
+    ++p6.first;
+    cout << "j: " << j << endl;
+    ++p6.second;
+    cout << "j: " << j << endl;
+
+    auto p9 = make_pair('x', 'y');
+    char c;
+    tie(ignore, c) = p9; //extract second value into c(ignore first value)
+    cout << "c: " << c << endl;
+
+    auto p10 = make_pair('a', 'B');   // '==' for return x.first == y.first && x.second == y.second, 
+    auto p11 = make_pair('A', 'B');
+
+    cout <<" p10 < p11 ? " <<static_cast<bool>(p10 < p11) << endl;  //比较运算符， first value具有较高优先级， first value相等才比较second value
 
     system("pause");
 
