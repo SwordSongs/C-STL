@@ -1,0 +1,40 @@
+#include<iostream>
+#include<string>
+#include<tuple>
+#include<complex>
+using namespace std;
+
+
+int main() {
+    //elements are initial with default value
+    tuple<string, int, int, complex<double>> t;
+
+    //create and initialize a tuple explicitly
+    tuple<int, float, string> t1(41, 6.3F, "leo");
+
+    //print:
+    cout << get<0>(t1) <<" , "<< get<1>(t1)<<" , "<< get<2>(t1) << endl;
+
+    //create tuple with make_tuple()
+    auto t2 = make_tuple(22, 44.1F, "jay");
+
+    //assign first value in t2 to t1
+    get<0>(t1) = get<0>(t2);
+    cout << get<0>(t1) << " , " << get<1>(t1) << " , " << get<2>(t1) << endl;
+
+    if (t1 < t2)
+    {
+        t1 = t2;
+    }
+
+    //print:
+    //int i = 0;
+    /*cout<< get<i>(t1);*/    //tuple不允许迭代元素，get索引值无法传递变量，传递无效索引亦会报错 
+    cout<<get<0>(t1) << " , " << get<1>(t1) << " , " << get<2>(t1) << endl;
+
+
+    
+    system("pause");
+
+    return 0;
+}
