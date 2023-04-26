@@ -4,6 +4,42 @@
 #include<complex>
 using namespace std;
 
+tuple<int, int> foo()
+{
+    // return { 1,2 };   //无法隐式转换初始化列表至tuple，需要显式
+    return make_tuple(1, 2);
+}
+
+//input & output tuple
+//print element with index IDX of tuple with MAX elements
+template<int IDX, int MAX, typename ...Args>
+struct PRINT_TUPLE 
+{
+    static void print(ostream& os, const tuple<Args...>& t)
+    {
+        os << get<IDX>(t) << (IDX + 1 == MAX ? "" : ",");
+        PRINT_TUPLE<IDX + 1, MAX, Args...>::print(os, t);
+    }
+};
+
+//partial specialization to end the recursion
+template<int MAX, typename... Args>
+struct PRINT_TUPLE<MAX, MAX, Args...> {
+    static void print(ostream& os, const tuple<Args...>& t)
+    {
+
+    }
+};
+
+//output operator for tuples
+template<typename... Args>
+ostream& operator<<(ostream& os, const tuple<Args...>& t)
+{
+    os << "[";
+    PRINT_TUPLE<0, sizeof...(Args), Args...>::print(os, t);
+    return os << "]";
+}
+
 
 int main() {
     //elements are initial with default value
@@ -40,21 +76,4 @@ int main() {
 
     auto t4 = make_tuple(s);
     get<0>(t4) = "world";
-    cout << "s: " << s << " , t4<0>: " << get<0>(t4) << endl;
-
-    auto t5 = make_tuple(ref(s));
-    get<0>(t5) = "world";
-    cout << "s: " << s << " , t5<0>: " << get<0>(t5) << endl;
-
-    tuple<int, float, string> t6(1, 3.14F, "hello");   //packing values into tuple
-    cout << "t6<0>: " << get<0>(t6) << " , t6<1>: " << get<1>(t6) << " , t6<2>: " << get<2>(t6) << endl;
-    int i = 0;
-    float f = 0.0F;
-    string s1 = "";
-    tie(i, f, s1) = t6;      //by reference, upack tuple into variables
-    cout << "i: " << i << " , f: " << f << " , s1: " << s1 << endl;
-
-    system("pause");
-
-    return 0;
-}
+    cou
