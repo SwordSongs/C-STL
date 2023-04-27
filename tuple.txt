@@ -76,4 +76,32 @@ int main() {
 
     auto t4 = make_tuple(s);
     get<0>(t4) = "world";
-    cou
+    cout << "s: " << s << " , t4<0>: " << get<0>(t4) << endl;
+
+    auto t5 = make_tuple(ref(s));
+    get<0>(t5) = "world";
+    cout << "s: " << s << " , t5<0>: " << get<0>(t5) << endl;
+
+    tuple<int, float, string, bool> t6(1, 3.14F, "hello", true);   //packing values into tuple
+    cout << "t6<0>: " << get<0>(t6) << " , t6<1>: " << get<1>(t6) << " , t6<2>: " << get<2>(t6) << endl;
+    int i = 0;
+    float f = 0.0F;
+    string s1 = "";
+    tie(i, ignore, s1, ignore) = t6;      //by reference, upack tuple into variables, ignore the second value
+    cout << "i: " << i << " , f: " << f << " , s1: " << s1 << endl;
+
+
+    //辅助函数
+    cout << "t6 has " << tuple_size<decltype(t6)>::value << " elements." << endl;
+    
+    cout << "第一个元素类型size(int)为:" << sizeof(tuple_element<0, decltype(t6)>::type) << endl;
+    auto tupleCat = tuple_cat(t5, t6);
+    cout << "tupleCat has " << tuple_size<decltype(tupleCat)>::value << " elements." << endl;
+
+    //模板元编程实现打印tuple
+    cout <<" output t6: "<< t6 << endl;
+
+    system("pause");
+
+    return 0;
+}
