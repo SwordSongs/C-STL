@@ -1,0 +1,117 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<memory>
+using namespace std;
+
+class Person
+{
+public:
+    string name;
+    shared_ptr<Person> mother;
+    shared_ptr<Person> father;
+    /*vector<shared_ptr<Person>> kids;*/
+    vector<weak_ptr<Person>> kids;
+
+    Person(const string& n,
+        shared_ptr<Person> m = nullptr,
+        shared_ptr<Person> f = nullptr) : name(n), mother(m), father(f) {}
+
+    ~Person() 
+    {
+        cout << "delete " << name << endl;
+    }
+};
+
+shared_ptr<Person> initFamily(const string& name)
+{
+    shared_ptr<Person> mom(new Person(name + "'s mom"));
+    shared_ptr<Person> dad(new Person(name + "'s dad"));
+    shared_ptr<Person> kid(new Person(name, mom, dad));
+
+    mom->kids.push_back(kid);
+    dad->kids.push_back(kid);
+
+    return kid;
+}
+
+int main()
+{
+    ////默认执行delete, 可定义自己的deleter
+    //shared_ptr<string> pNico(new string("nico"),
+    //    [](string *p) {
+    //                      cout << "call nico deleter." << endl;
+    //                      delete p;
+    //});
+
+    //shared_ptr<string> pJay(new string("jay"));
+
+    ////capitalize persion names
+    //(*pNico)[0] = 'N';
+    //pJay->replace(0, 1, "J");
+
+    ////put them multiple times in a container
+    //vector<shared_ptr<string>> who;
+    //who.push_back(pJay);
+    //who.push_back(pJay);
+    //who.push_back(pNico);
+    //who.push_back(pJay);
+    //who.push_back(pNico);
+
+    ////print all elements
+    //for (auto ptr : who)
+    //{
+    //    cout << *ptr << " ";
+    //}
+
+    //cout << endl;
+
+    ////overwrite a name again
+    //*pNico = "Nicolai";
+
+    ////print all elements
+    //for (auto ptr : who)
+    //{
+    //    cout << *ptr << " ";
+    //}
+
+    //cout << endl;
+
+    //cout << "Jay use_cont: " << who[0].use_count() << endl;
+    //cout << "Nicolai use_cont: " << who[2].use_count() << endl;
+
+    ////销毁pNico指向对象
+    //pNico = nullptr;
+    //cout << "Nicolai use_cont: " << who[2].use_count() << endl;
+    //who.resize(2);
+
+    //// shared_ptr<int> pArray(new int[10]);    wrong, 默认调用delete， 而不是delete[]
+    //shared_ptr<int> pArray(new int[10], [](int *p) { cout << "delete[] p." << endl;  delete[] p; });
+    // cout << "array use_count: " << pArray.use_count() << endl;
+    // pArray = nullptr;
+
+
+     //1.shared_ptr的cyclic reference（环式指向）
+     //2.“明确想共享但不愿拥有”， ----》weak_ptr, 一旦最末拥有该对象的shared_ptr失去拥有权, 任何weak_ptr都会自动empty
+
+    shared_ptr<Person> p = initFamily("Jay");
+    cout << "Jay's family exists" << endl;
+    cout << "- Jay is shared " << p.use_count() << " times"<<endl;
+
+    if (!p->mother->kids[0].expired())
+    {
+        shared_ptr<Person> p1 = p->mother->kids[0].lock();
+        cout << "- name 1st kid of Jay's mom: "
+            << p1->name << endl;
+        cout << "- Jay is shared " << p.use_count() << " times" << endl;
+    }
+
+    cout << "- Jay is shared " << p.use_count() << " times" << endl;
+
+    //p = initFamily("May");
+    //vector<shared_ptr<Person>> kids时，未释放原有p指向对象
+    //vector<shared_ptr<Person>> kids -> vector<weak_ptr<Person>> kids; 打破cyclic reference释放对象
+   
+    system("pause");
+    return EXIT_SUCCESS;
+}
