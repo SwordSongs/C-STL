@@ -111,6 +111,24 @@ int main()
     //p = initFamily("May");
     //vector<shared_ptr<Person>> kids时，未释放原有p指向对象
     //vector<shared_ptr<Person>> kids -> vector<weak_ptr<Person>> kids; 打破cyclic reference释放对象
+	
+	//*************误用shared_ptr, 确保对象资源被一个shared_ptr所拥有
+	//int* p = new int;
+    //shared_ptr<int> sp1(p, [](int* ptr){cout << "destroy int." << endl; delete ptr; });
+    ////shared_ptr<int> sp2(p);    //两个指针均拥有对象资源，误用shared_ptr对相同申请资源对象释放多次
+    //shared_ptr<int> sp2(sp1);    //s1与s2共享拥有权
+
+    auto del = [](double* p) { delete p; };
+
+    //shared_ptr<int> sp3(new int, del);
+
+    //decltype(del)* fp = get_deleter<decltype(del)>(sp3);
+
+    shared_ptr<double> sp4(new double, del);
+
+    //sp1 = nullptr;  
+    //sp2 = nullptr;
+
    
     system("pause");
     return EXIT_SUCCESS;
