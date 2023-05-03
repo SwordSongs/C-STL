@@ -1,0 +1,40 @@
+#include<iostream>
+#include<functional>
+#include<vector>
+using namespace std;
+
+int sub(int x, int y)
+{
+    return x - y;
+}
+
+int main()
+{
+    //reference wrapper
+    vector<reference_wrapper<int>> v;
+
+    int i = 10;
+
+    v.push_back(i);
+
+    for (int i : v)
+        cout << "element: " << i << endl;
+
+    i = 100;
+
+
+    for (int i : v)
+        cout << "element: " << i << endl;
+
+    //function type wrapper
+    vector<function<int(int, int)>> tasks;
+    tasks.push_back(sub);
+    tasks.push_back([i](int a, int b)->int {if (i>0) return a + b; else return a - b; });
+    for (function<int(int, int)> f : tasks)
+    {
+       cout<<"resut of task: "<< f(100, 200)<<endl;
+    }
+   
+    system("pause");
+    return EXIT_SUCCESS;
+}
