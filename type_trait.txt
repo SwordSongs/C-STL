@@ -1,0 +1,41 @@
+#include<iostream>
+#include<type_traits>
+using namespace std;
+
+template <typename T>
+void foo(const T& val)
+{
+    if (is_pointer<T>::value)
+        cout << "foo() called for a pointer." << endl;
+    else
+        cout << "foo() called for a value." << endl;
+}
+
+//foo() implementation for pointer type
+template<typename T>
+void foo_impl(const T &val, true_type)
+{
+    cout << "foo() called for pointer to " << *val << endl;
+}
+
+//foo() implementation for non-pointer type
+template<typename T>
+void foo_impl(const T &val, false_type)
+{
+    cout << "foo() called for value to " << val << endl;
+}
+
+int main()
+{
+    int i = 0;
+    foo(i);
+
+    int *p = &i;
+    foo(p);
+
+    foo_impl(i, is_pointer<decltype(i)>());
+    foo_impl(p, is_pointer<decltype(p)>());
+
+    return EXIT_SUCCESS;
+}
+
