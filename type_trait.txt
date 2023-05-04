@@ -1,0 +1,101 @@
+#include<iostream>
+#include<type_traits>
+using namespace std;
+
+template <typename T>
+void foo(const T& val)
+{
+    if (is_pointer<T>::value)
+        cout << "foo() called for a pointer." << endl;
+    else
+        cout << "foo() called for a value." << endl;
+}
+
+//foo() implementation for pointer type
+template<typename T>
+void foo_impl(const T &val, true_type)
+{
+    cout << "foo() called for pointer to " << *val << endl;
+}
+
+//foo() implementation for non-pointer type
+template<typename T>
+void foo_impl(const T &val, false_type)
+{
+    cout << "foo() called for value to " << val << endl;
+}
+
+int main()
+{
+    int i = 0;
+    foo(i);
+
+    int *p = &i;
+    foo(p);
+
+    foo_impl(i, is_pointer<decltype(i)>());
+    foo_impl(p, is_pointer<decltype(p)>());
+
+    return EXIT_SUCCESS;
+}
+
+
+
+#include<iostream>
+#include<type_traits>
+using namespace std;
+
+template<typename T1, typename T2>
+typename common_type<T1, T2>::type min(const T1 &x, const T2 &y)
+{
+    return x < y ? x : y;
+}
+
+// factorial as an integral_constant
+template <unsigned n>
+struct factorial : std::integral_constant<int, n * factorial<n - 1>::value> {};
+
+template <>
+struct factorial<0> : std::integral_constant<int, 1> {};
+
+class Person {};
+
+typedef std::decay<int>::type A;           // int
+typedef std::decay<int&>::type B;          // int
+typedef std::decay<int&&>::type C;         // int
+typedef std::decay<const int&>::type D;    // int
+typedef std::decay<int[2]>::type E;        // int*
+typedef std::decay<int(int)>::type F;      // int(*)(int)
+
+
+int main()
+{
+    cout << min(1.2, 1) << endl;
+    cout << factorial<5>::value << endl;
+    
+    cout << boolalpha <<"char is integral: "<< is_integral<char>::value << endl;
+    cout << "string is integral: " << is_integral<string>::value << endl;
+    cout << "char is signed: " << is_signed<char>::value << endl;
+
+    const char c = 'a';
+    cout << "c is constant: " << is_const<decltype(c)>::value << endl;
+
+    cout << "Person is move constructible: " << is_move_constructible<Person>::value << endl;  
+    //用以检验copy和move语义的那些trait，只检验是否相应表达式为可能，一个带有copy构造函数但是没有move构造函数的类型，仍然是move constructible
+
+    std::cout << std::boolalpha;
+    std::cout << "typedefs of int:" << std::endl;
+    std::cout << "A: " << std::is_same<int, A>::value << std::endl;
+    std::cout << "B: " << std::is_same<int, B>::value << std::endl;
+    std::cout << "C: " << std::is_same<int, C>::value << std::endl;
+    std::cout << "D: " << std::is_same<int, D>::value << std::endl;
+    std::cout << "E: " << std::is_same<int, E>::value << std::endl;
+    std::cout << "F: " << std::is_same<int, F>::value << std::endl;
+   
+    system("pause");
+    return EXIT_SUCCESS;
+}
+
+
+
+

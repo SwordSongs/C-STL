@@ -37,7 +37,7 @@ shared_ptr<Person> initFamily(const string& name)
 
 int main()
 {
-    ////Ä¬ÈÏÖ´ĞĞdelete, ¿É¶¨Òå×Ô¼ºµÄdeleter
+    ////é»˜è®¤æ‰§è¡Œdelete, å¯å®šä¹‰è‡ªå·±çš„deleter
     //shared_ptr<string> pNico(new string("nico"),
     //    [](string *p) {
     //                      cout << "call nico deleter." << endl;
@@ -80,19 +80,19 @@ int main()
     //cout << "Jay use_cont: " << who[0].use_count() << endl;
     //cout << "Nicolai use_cont: " << who[2].use_count() << endl;
 
-    ////Ïú»ÙpNicoÖ¸Ïò¶ÔÏó
+    ////é”€æ¯pNicoæŒ‡å‘å¯¹è±¡
     //pNico = nullptr;
     //cout << "Nicolai use_cont: " << who[2].use_count() << endl;
     //who.resize(2);
 
-    //// shared_ptr<int> pArray(new int[10]);    wrong, Ä¬ÈÏµ÷ÓÃdelete£¬ ¶ø²»ÊÇdelete[]
+    //// shared_ptr<int> pArray(new int[10]);    wrong, é»˜è®¤è°ƒç”¨deleteï¼Œ è€Œä¸æ˜¯delete[]
     //shared_ptr<int> pArray(new int[10], [](int *p) { cout << "delete[] p." << endl;  delete[] p; });
     // cout << "array use_count: " << pArray.use_count() << endl;
     // pArray = nullptr;
 
 
-     //1.shared_ptrµÄcyclic reference£¨»·Ê½Ö¸Ïò£©
-     //2.¡°Ã÷È·Ïë¹²Ïíµ«²»Ô¸ÓµÓĞ¡±£¬ ----¡·weak_ptr, Ò»µ©×îÄ©ÓµÓĞ¸Ã¶ÔÏóµÄshared_ptrÊ§È¥ÓµÓĞÈ¨, ÈÎºÎweak_ptr¶¼»á×Ô¶¯empty
+     //1.shared_ptrçš„cyclic referenceï¼ˆç¯å¼æŒ‡å‘ï¼‰
+     //2.â€œæ˜ç¡®æƒ³å…±äº«ä½†ä¸æ„¿æ‹¥æœ‰â€ï¼Œ ----ã€‹weak_ptr, ä¸€æ—¦æœ€æœ«æ‹¥æœ‰è¯¥å¯¹è±¡çš„shared_ptrå¤±å»æ‹¥æœ‰æƒ, ä»»ä½•weak_ptréƒ½ä¼šè‡ªåŠ¨empty
 
     shared_ptr<Person> p = initFamily("Jay");
     cout << "Jay's family exists" << endl;
@@ -109,26 +109,8 @@ int main()
     cout << "- Jay is shared " << p.use_count() << " times" << endl;
 
     //p = initFamily("May");
-    //vector<shared_ptr<Person>> kidsÊ±£¬Î´ÊÍ·ÅÔ­ÓĞpÖ¸Ïò¶ÔÏó
-    //vector<shared_ptr<Person>> kids -> vector<weak_ptr<Person>> kids; ´òÆÆcyclic referenceÊÍ·Å¶ÔÏó
-	
-	//*************ÎóÓÃshared_ptr, È·±£¶ÔÏó×ÊÔ´±»Ò»¸öshared_ptrËùÓµÓĞ
-	//int* p = new int;
-    //shared_ptr<int> sp1(p, [](int* ptr){cout << "destroy int." << endl; delete ptr; });
-    ////shared_ptr<int> sp2(p);    //Á½¸öÖ¸Õë¾ùÓµÓĞ¶ÔÏó×ÊÔ´£¬ÎóÓÃshared_ptr¶ÔÏàÍ¬ÉêÇë×ÊÔ´¶ÔÏóÊÍ·Å¶à´Î
-    //shared_ptr<int> sp2(sp1);    //s1Óës2¹²ÏíÓµÓĞÈ¨
-
-    auto del = [](double* p) { delete p; };
-
-    //shared_ptr<int> sp3(new int, del);
-
-    //decltype(del)* fp = get_deleter<decltype(del)>(sp3);
-
-    shared_ptr<double> sp4(new double, del);
-
-    //sp1 = nullptr;  
-    //sp2 = nullptr;
-
+    //vector<shared_ptr<Person>> kidsæ—¶ï¼Œæœªé‡Šæ”¾åŸæœ‰pæŒ‡å‘å¯¹è±¡
+    //vector<shared_ptr<Person>> kids -> vector<weak_ptr<Person>> kids; æ‰“ç ´cyclic referenceé‡Šæ”¾å¯¹è±¡
    
     system("pause");
     return EXIT_SUCCESS;

@@ -1,0 +1,72 @@
+#include<iostream>
+#include<vector>
+#include<memory>
+using namespace std;
+
+void sink(unique_ptr<string, void (*) (string*)> up)
+{
+    //...
+}
+
+unique_ptr<string, void (*) (string*)> source()
+{
+    unique_ptr<string, void(*)(string*)> ups(new string("Leo"), [](string* s) {cout << "delete string psource." << endl; delete s; });
+    //...
+    return ups;  //转移所有权，c++11规定等价于return move(ups);
+}
+
+void f()
+{
+    unique_ptr<string, void (*) (string*)> ups(nullptr, nullptr);
+
+    for (int i = 0; i < 10; ++i)
+    {
+        cout << "begin: call function source." << endl;
+        ups = source();   ////ups calls deleter, ups get ownership of the returned object, previously returned object of source gets deleted.
+        cout << "end: call function source." << endl;
+    }   
+
+    //...
+    //ups calls deleter
+}
+
+int main()
+{
+    unique_ptr<int, void(*)(int*)> up(new int, [](int *p) {cout << "delete int p." << endl; delete p; });
+    //shared_ptr<int> sp(new int, [](int* p) {cout << "int p" << endl; delete p; });
+
+    unique_ptr<string, void(*)(string*)> ups(new string("jay"), [](string* s) {cout << "delete string p." << endl; delete s; });
+    (*ups)[0] = 'J';
+    ups->append(" Chou");
+    cout << *ups << endl;
+
+    //string *sr = ups.release();    //获得up的raw pointer，使其放弃拥有权， shared_ptr无此操作
+
+    //unique_ptr<string> ups1(sr);   
+    //cout << *ups1 << endl;
+    ////unique_ptr<string> ups2(sr);    //unique_ptr为独占式拥有，但需程序员保证， 否则触发运行期错误
+    //                                  
+
+    ////unique_ptr<string> ups2(ups1);    //unique_ptr不支持copy构造与assignment运算符，但可以move语义
+    ////unique_ptr<string> ups2(nullptr);
+    ////ups2 = ups1;
+
+    //unique_ptr<string> ups2(nullptr);
+    //ups2 = move(ups1);
+    ////cout << *ups1 << endl;
+
+    //ups2 = nullptr;
+    //ups2 = unique_ptr<string>(new string("May"));  //指派新值给unique_ptr，新值也必须是个unique_ptr
+    //cout << *ups2 << endl;
+
+    //sink(move(ups));    //函数接收端
+    //cout<<"call back from sink."<<endl;
+
+    f();                  //函数供应端
+
+
+
+   // system("pause");
+    return 0;
+}
+
