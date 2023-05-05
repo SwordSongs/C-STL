@@ -1,0 +1,22 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+int main()
+{
+    int i = 1;
+    long l = 4;
+
+    auto m = min<long>(i, l);
+
+    auto result = minmax({ 3,2,1,8,0,5 });
+
+    cout << "min: "<<result.first << " , " <<"max: "<< result.second << endl;
+
+    result = minmax({ 3,2,1,8,0,5 }, [](int x, int y)->int {return x > y; });
+
+    cout << "max: "<<result.first << " , " << "min: "<<result.second << endl;
+
+    system("pause");
+    return EXIT_SUCCESS;
+}
