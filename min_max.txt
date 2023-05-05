@@ -7,9 +7,9 @@ int main()
     int i = 1;
     long l = 4;
 
-    auto m = min<long>(i, l);
+    auto m = min<long>(i, l);    //return T&
 
-    auto result = minmax({ 3,2,1,8,0,5 });
+    auto result = minmax({ 3,2,1,8,0,5 });  //初始化列表需要临时内存，故return T
 
     cout << "min: "<<result.first << " , " <<"max: "<< result.second << endl;
 
