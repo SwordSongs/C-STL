@@ -1,0 +1,38 @@
+#include<iostream>
+#include<utility>
+#include<vector>
+using namespace std;
+using namespace std::rel_ops;    //make != , >, etc, available
+
+class X
+{
+public:
+    X(int v) :val(v) {}
+
+    bool operator< (const X &x) const
+    {
+        return val < x.val;
+    }
+
+    bool operator== (const X &x) const
+    {
+        return val == x.val;
+    }
+
+
+private:
+    int val;
+};
+
+int main()
+{
+    X a(1);
+    X b(2);
+
+    cout << boolalpha <<"a < b: "<< (a < b) << endl;
+    cout << "a > b: "<<(a > b) << endl;
+    cout << "a != b: " << (a != b) << endl;
+
+    system("pause");
+    return EXIT_SUCCESS;
+}
