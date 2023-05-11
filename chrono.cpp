@@ -1,7 +1,9 @@
 #include<iostream>
 #include<ratio>
 #include<chrono>
+#include<iomanip>
 using namespace std;
+using namespace std::chrono;
 
 template <typename V, typename R>
 ostream &operator << (ostream &os, const chrono::duration<V, R> &d)
@@ -54,9 +56,28 @@ int main()
     chrono::seconds s2 = chrono::duration_cast<chrono::minutes>(halfMin);
     cout << s2.count() << " s " << endl;
 
+    ms = chrono::milliseconds(7255042);
+    chrono::hours hh = chrono::duration_cast<chrono::hours>(ms);
+    chrono::minutes mm = chrono::duration_cast<chrono::minutes>(ms % hours(1));
+    chrono::seconds ss = chrono::duration_cast<seconds>(ms % minutes(1));
+    milliseconds msec = duration_cast<milliseconds>(ms % seconds(1));
 
 
+    cout << " raw: " << hh <<"::"<<mm<<"::"<<ss<<"::"<<msec << endl;
+    cout << "        " << setfill('0') << setw(2) << hh.count() << " :: "
+                                       << setw(2) << mm.count() << " :: "
+                                       << setw(2) << ss.count() << " :: "
+                                       << setw(2) << msec.count() << endl;
 
+    cout << "hh max: " << hh.max() << endl;
+    cout << "mm max: " << mm.max() << endl;
+    cout << "ss max: " << ss.max() << endl;
+    cout << "msec max: " << msec.max() << endl;
+
+    cout << "hh min: " << hh.min() << endl;
+    cout << "mm min: " << mm.min() << endl;
+    cout << "ss min: " << ss.min() << endl;
+    cout << "msec min: " << msec.min() << endl;
     return EXIT_SUCCESS;
 }
 
