@@ -1,0 +1,42 @@
+#include<iostream>
+#include<unordered_set>
+#include<string>
+using namespace std;
+
+void print(unordered_set<string> &us)
+{
+    for (auto &element : us)
+    {
+        cout << element << " ";
+    }
+
+    cout << endl;
+}
+
+int main()
+{
+    //元素无明确排列顺序，后续元素插入会引起先前已插入元素的次序改变
+    //具有相同元素的无序容器， 元素的排列次序也有可能不同
+    unordered_set<string> cities1 = {"BeiJing", "ChongQing", "GuangZhou"};
+
+    //add elements
+    cities1.insert("ShenYang");
+    cities1.insert("TianJin");
+    cities1.insert("ShiJiaZhuang");
+    cities1.insert("ShangHai");
+
+    unordered_set<string> cities2 = { "ShangHai", "BeiJing", "ChongQing", "ShenYang", "GuangZhou" };
+
+    cities2.insert("ShiJiaZhuang");
+    cities2.insert("TianJin");
+    cities2.insert("ShenYang");
+    cities2.insert("ShangHai");
+ 
+    cout << "cities1: " ;
+    print(cities1);
+    cout << "cities2: ";
+    print(cities2);
+
+    system("pause");
+    return EXIT_SUCCESS;
+}
