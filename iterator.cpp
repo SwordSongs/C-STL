@@ -16,10 +16,18 @@ int main()
     cout << "list: "<<endl;
     //const_iterator, read only
     //iterator 
-    for (list<char>::iterator it = coll.begin(); it != coll.end(); ++it)   // it++, ok, but slightly slower 
+   
+    //for (list<char>::iterator it = coll.begin(); it != coll.end(); ++it)   // it++, ok, but slightly slower 
+    //{
+    //    *it = toupper(*it);
+    //    cout << *it << " ";
+    //}
+    //cout << endl;
+
+    for (auto it = coll.cbegin(); it != coll.cend(); ++it)   // it++, ok, but slightly slower 
     {
-        *it = toupper(*it);
-        cout << *it << " ";
+        //*it = toupper(*it);
+        cout << static_cast<char>(toupper(*it)) << " ";
     }
     cout << endl;
 
