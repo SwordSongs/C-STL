@@ -1,0 +1,63 @@
+#include <iostream>
+#include <set>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+class Person {
+public:
+    Person(string f, string l) : firstname(f), lastname(l)
+    {
+    
+    }
+
+    ~Person() {}
+
+    string getFirstName() const
+    {
+        return firstname;
+    }
+    string getLastName() const
+    {
+        return lastname;
+    }
+
+private:
+    string firstname;
+    string lastname;
+};
+
+//class for function predicate
+//operator() returns whether a person is less than another
+class PersonSortCriterion {
+public:
+    bool operator()(const Person& lhs, const Person& rhs)
+    {
+        return lhs.getLastName() < rhs.getLastName()
+           || (lhs.getLastName() == rhs.getLastName() && lhs.getFirstName() < rhs.getFirstName());
+    }
+
+
+
+};
+
+
+int main()
+{   
+    //create a set with special sorting criterion
+    set<Person, PersonSortCriterion> coll;
+
+    coll.insert(Person("Jack", "Ma"));
+    coll.insert(Person("Michael", "Jackson"));
+    coll.insert(Person("Amanda", "Carl"));
+
+    //print
+    for (auto &p : coll)
+    {
+        cout << "firstName: " << p.getFirstName() << " , lastName: " << p.getLastName() << endl;
+    }
+
+    system("pause");
+    return EXIT_SUCCESS;
+}
+
