@@ -1,0 +1,44 @@
+#include <iostream>
+#include <list>
+#include <algorithm>
+#include <string>
+#include <functional>
+using namespace std;
+using namespace std::placeholders;
+
+template<typename T>
+void print(T container, string info = "Container: ")
+{
+    for (const auto &i : container)
+    {
+        cout << i << " ";
+    }
+
+    cout << endl;
+}
+
+
+
+int main()
+{
+    auto plus10 = bind(plus<int>(), _1, 10);
+
+    cout << "+10: " << plus10(7) << endl;
+
+    auto plus10times2 = bind(multiplies<int>(), bind(plus<int>(), _1, 10), 2);
+
+    cout << "+10*2: " << plus10times2(7) << endl;
+
+    auto pow3 = bind(multiplies<int>(), bind(multiplies<int>(), _1, _1), _1);
+
+    cout << "pow3: " << pow3(10) << endl;
+
+
+    cout << "invidiv: " << bind(divides<double>(), _2, placeholders::_1)(10, 2) << endl;
+
+
+
+
+    system("pause");
+    return EXIT_SUCCESS;
+}
