@@ -1,0 +1,66 @@
+#include <iostream>
+#include <algorithm>
+#include <functional>
+#include <locale>
+#include <vector>
+#include <string>
+using namespace std;
+
+template<typename T>
+void print(T container, string info = "Container: ")
+{
+    for (const auto &i : container)
+    {
+        cout << i << " ";
+    }
+
+    cout << endl;
+}
+
+class Person 
+{
+    public:
+        Person(const string &n) : name(n) {}
+        void print() const 
+        {
+            cout << name << endl;
+        }
+
+        void print2(const string &prefix) const 
+        {
+            cout << prefix << name << endl;
+        }
+
+        void setName(const string &n)
+        {
+            name = n;
+        }
+
+    private:
+        string name;
+};
+
+int main()
+{
+    vector<Person> coll = { Person("Tick"), Person("Trick"), Person("Track") };
+
+    //call member function print() for each person
+    for_each(coll.begin(), coll.end(), bind(&Person::print, placeholders::_1));
+    cout << endl;
+
+    //call member function print2() with additional argument for each person
+    for_each(coll.begin(), coll.end(), bind(&Person::print2, placeholders::_1, "Person: "));
+    cout << endl;
+
+    //call print2() for temporary person
+    bind(&Person::print2, placeholders::_1, "This is: ")(Person("Nico"));
+
+    //call member function print() for each person
+    for_each(coll.begin(), coll.end(), bind(&Person::setName, placeholders::_1, "Paul"));
+    cout << "after setName Paul: " << endl;
+    for_each(coll.begin(), coll.end(), bind(&Person::print, placeholders::_1));
+    cout << endl;
+
+    system("pause");
+    return EXIT_SUCCESS;
+}
