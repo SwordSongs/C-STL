@@ -1,0 +1,46 @@
+#include <iostream>
+#include <list>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+template<typename T>
+void print(T container, string info = "Container: ")
+{
+    for (const auto &i : container)
+    {
+        cout << i << " ";
+    }
+
+    cout << endl;
+}
+
+class Nth {
+public:
+    //constructor
+    Nth(int n) : nth(n), count(0) {}
+    bool operator() (int) {
+        return ++count == nth;
+    }
+
+private:
+    int nth;
+    int count;
+};
+
+int main()
+{
+    list<int> el = { 1,2,3,4,5,6,7,8,9,10 };
+    print(el, "List: ");
+
+    //remove third element
+    list<int>::iterator pos;
+    pos = remove_if(el.begin(), el.end(), Nth(3));   //跟书上version1实现有出入，结果是version 2
+    el.erase(pos, el.end());
+
+    print(el, "List: ");
+
+
+    system("pause");
+    return EXIT_SUCCESS;
+}

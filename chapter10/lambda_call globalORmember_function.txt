@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+#include <locale>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+char myToUpper(char c)
+{
+    locale loc;
+    return use_facet<ctype<char>>(loc).toupper(c);
+}
+
+class Person
+{
+    public:
+        Person(const string &n) : name(n) {}
+        void print() const {
+            cout << name << endl;
+        }
+
+        void print2(const string &prefix) const {
+            cout << prefix << name << endl;
+        }
+    private:
+        string name;
+};
+
+int main()
+{
+    string s("Internationalization");
+    string sub("Nation");
+
+    //call global function
+    //search substring case insensitive
+    string::iterator pos;
+    pos = search(s.begin(), s.end(),
+                sub.begin(), sub.end(),
+                [](char c1, char c2) {
+                    return myToUpper(c1) == myToUpper(c2);
+                });
+
+    if (pos != s.end())
+    {
+        cout << "\"" << sub << "\" is part of \"" << s << "\"" << endl;
+    }
+    else
+    {
+        cout << "\"" << sub << "\" is NOT part of \"" << s << "\"" << endl;
+    }
+
+    //call member function
+    vector<Person> coll = {Person("Tick"), Person("Trick"), Person("Track")};
+
+    for_each(coll.begin(), coll.end(),
+            [](const Person &p) {
+                p.print();
+            });
+    cout << endl;
+
+    for_each(coll.begin(), coll.end(),
+        [](const Person &p) {
+            p.print2("Person: ");
+        });
+    cout << endl;
+
+    system("pause");
+    return EXIT_SUCCESS;
+}

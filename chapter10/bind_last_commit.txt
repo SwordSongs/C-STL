@@ -1,0 +1,102 @@
+#include <iostream>
+#include <algorithm>
+#include <functional>
+#include <locale>
+#include <vector>
+#include <string>
+#include <map>
+#include <numeric>
+#include <cmath>
+using namespace std;
+
+template<typename T>
+void print(T container, string info = "Container: ")
+{
+    for (const auto &i : container)
+    {
+        cout << i.second << " ";
+    }
+
+    cout << endl;
+}
+
+class Person 
+{
+    public:
+        Person(const string &n) : name(n) {}
+        void print() const 
+        {
+            cout << name << endl;
+        }
+
+        void print2(const string &prefix) const 
+        {
+            cout << prefix << name << endl;
+        }
+
+        void setName(const string &n)
+        {
+            name = n;
+        }
+
+    private:
+        string name;
+};
+
+template <typename T1, typename T2>
+struct fopow
+{
+    T1 operator()(T1 base, T2 exp) const
+    {
+        return pow(base, exp);
+    }
+};
+
+int main()
+{
+    //vector<Person> coll = { Person("Tick"), Person("Trick"), Person("Track") };
+
+    ////call member function print() for each person
+    //for_each(coll.begin(), coll.end(), bind(&Person::print, placeholders::_1));
+    //cout << endl;
+
+    ////call member function print2() with additional argument for each person
+    //for_each(coll.begin(), coll.end(), bind(&Person::print2, placeholders::_1, "Person: "));
+    //cout << endl;
+
+    ////call print2() for temporary person
+    //bind(&Person::print2, placeholders::_1, "This is: ")(Person("Nico"));
+
+    ////call member function print() for each person
+    //for_each(coll.begin(), coll.end(), bind(&Person::setName, placeholders::_1, "Paul"));
+    //cout << "after setName Paul: " << endl;
+    //for_each(coll.begin(), coll.end(), bind(&Person::print, placeholders::_1));
+    //cout << endl;
+
+    //map<string, int> emap;
+    //emap.insert(make_pair("Jack", 100));
+    //emap.insert(make_pair("Lily", 200));
+    //emap.insert(make_pair("Rose", 300));
+
+    //int sum = accumulate(emap.begin(), emap.end(), 
+    //                     0, 
+    //                     bind(plus<int>(), placeholders::_1, bind(&map<string, int>::value_type::second, placeholders::_2)));
+
+    //cout << "sum: " << sum << endl;
+
+    vector<int> coll = { 1,2,3,4,5,6,7,8,9 };
+    //print 3 raised to the power of all elements
+    transform(coll.begin(), coll.end(),
+              ostream_iterator<int>(cout, " "),
+              bind(fopow<double, int>(), 3, placeholders::_1));
+    cout << endl;
+
+    //print all elements raised to the power of 3
+    transform(coll.begin(), coll.end(),
+        ostream_iterator<int>(cout, " "),
+        bind(fopow<double, int>(), placeholders::_1, 3));
+    cout << endl;
+
+    system("pause");
+    return EXIT_SUCCESS;
+}
