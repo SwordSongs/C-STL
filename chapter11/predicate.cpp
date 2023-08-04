@@ -100,6 +100,17 @@ int main()
         cout << "first non-heap element is not found: " << *heapBadPos << endl;
     }
 
+    cout << "-------------------------------------------------------" << endl;
+    vector<int> coll6;
+    INSERT_ELEMENTS(coll6, 1, 9);
+    PRINT_ELEMENTS(coll6, "vector coll6: ");
+
+    auto isEven = [](int elem) {  return elem % 2 == 0;  };
+
+    cout << "all even?: " << all_of(coll6.begin(), coll6.end(), isEven) << endl;
+    cout << "any even?: " << any_of(coll6.begin(), coll6.end(), isEven) << endl;
+    cout << "none even?: " << none_of(coll6.begin(), coll6.end(), isEven) << endl;
+
     system("pause");
     return 0;
 }
