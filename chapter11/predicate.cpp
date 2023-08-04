@@ -1,4 +1,4 @@
-#include "algostuff.hpp"
+﻿#include "algostuff.hpp"
 
 using namespace std;
 
@@ -69,4 +69,37 @@ int main()
         auto evenPos = partition_point(coll3.begin(), coll3.end(), isOdd);
         cout << "first even number: " << *evenPos << endl;
     }
-   
+    else
+    { 
+        cout << "coll3 is not partitioned" << endl;
+    }
+
+    cout << "-------------------------------------------------------" << endl;
+
+    vector<int> coll4 = {9, 8, 7, 7, 7, 5, 4, 2, 1};
+    vector<int> coll5 = {5, 3, 2, 1, 7, 9, 8, 6};
+
+    PRINT_ELEMENTS(coll4, "vector coll4: ");
+    PRINT_ELEMENTS(coll5, "vector coll5: ");
+
+    //check whether the collections are heaps
+    cout << boolalpha << "coll4 is heap: "
+        << is_heap(coll4.begin(), coll4.end()) << endl;
+
+    cout << boolalpha << "coll5 is heap: "
+        << is_heap(coll5.begin(), coll5.end()) << endl;
+
+    //print the first element that is not a heap in coll5
+    auto heapBadPos = is_heap_until(coll5.begin(), coll5.end());
+    if (heapBadPos != coll5.end())
+    {
+        cout << "first non-heap element: " << *heapBadPos << endl;
+    }
+    else
+    {
+        cout << "first non-heap element is not found: " << *heapBadPos << endl;
+    }
+
+    system("pause");
+    return 0;
+}
