@@ -15,7 +15,6 @@ int main()
 
     //find beginning of second part (element after 7)
     auto pos = find(coll.begin(), coll.end(), 7);
-
     ++pos;
 
     //merage into one sorted range, 原地
